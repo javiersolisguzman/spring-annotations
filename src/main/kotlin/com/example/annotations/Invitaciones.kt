@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -42,6 +43,7 @@ class InvitacionesServiceImpl(
   private val mensajeriaService: MensajeriaService
 ) : InvitacionesService {
 
+  @Transactional
   override fun invitar(nombre: String) {
     invitacionesRepository.save(Invitacion(nombre))
     mensajeriaService.enviarPaqueteA(nombre)
@@ -60,7 +62,8 @@ interface MensajeriaService {
 
 class Fedex(val codigoCliente: String) : MensajeriaService {
   override fun enviarPaqueteA(nombre: String) {
-    println("Soy la paqueteria fedex y pateo tu paquete")
+    //println("Soy la paqueteria fedex y pateo tu paquete")
+    throw RuntimeException("Se cayo Fedex")
   }
 }
 
