@@ -61,10 +61,11 @@ interface MensajeriaService {
   fun enviarPaqueteA(nombre: String)
 }
 
-class Fedex(val codigoCliente: String) : MensajeriaService {
+class Fedex(val codigoCliente: String, val invitacionConfiguracion: InvitacionConfiguracion) : MensajeriaService {
   override fun enviarPaqueteA(nombre: String) {
-    //println("Soy la paqueteria fedex y pateo tu paquete")
-    throw RuntimeException("Se cayo Fedex")
+    println("Soy la paqueteria fedex y pateo tu paquete")
+    println("paquete de ${invitacionConfiguracion.remitente}")
+    println("Mensaje final ${invitacionConfiguracion.mensajeFinal}")
   }
 }
 
@@ -73,9 +74,12 @@ class Fedex(val codigoCliente: String) : MensajeriaService {
 class ConfigurarMensajeria {
 
   @Bean
-  fun configurarPaqueteria(@Value("\${fedex.codigo}") codigoCliente: String): MensajeriaService {
+  fun configurarPaqueteria(
+    @Value("\${fedex.codigo}") codigoCliente: String,
+    invitacionConfiguracion: InvitacionConfiguracion
+  ): MensajeriaService {
     println("***************  El codigo fedex es $codigoCliente ************")
-    return Fedex(codigoCliente)
+    return Fedex(codigoCliente, invitacionConfiguracion)
   }
 }
 

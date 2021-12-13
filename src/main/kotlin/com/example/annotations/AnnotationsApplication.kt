@@ -1,9 +1,8 @@
 package com.example.annotations
 
-import java.util.Arrays
-import javax.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 class AnnotationsApplication
 
 fun main(args: Array<String>) {
