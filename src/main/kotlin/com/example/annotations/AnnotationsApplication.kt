@@ -26,16 +26,6 @@ class mainController {
   @Autowired
   private lateinit var ctx: ApplicationContext
 
-  @PostConstruct
-  fun init() {
-    println("Let's inspect the beans provided by Spring Boot:")
-    val beanNames: Array<String> = ctx.getBeanDefinitionNames()
-    Arrays.sort(beanNames)
-    for (beanName in beanNames) {
-      println(beanName)
-    }
-  }
-
   @GetMapping("/ceremonia-pastel")
   fun main() {
     println("yo mandaré a llamar el metodo comer pastel")

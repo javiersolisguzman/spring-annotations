@@ -3,6 +3,7 @@ package com.example.annotations
 import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.JpaRepository
@@ -72,8 +73,9 @@ class Fedex(val codigoCliente: String) : MensajeriaService {
 class ConfigurarMensajeria {
 
   @Bean
-  fun configurarPaqueteria(): MensajeriaService {
-    return Fedex("123")
+  fun configurarPaqueteria(@Value("\${fedex.codigo}") codigoCliente: String): MensajeriaService {
+    println("***************  El codigo fedex es $codigoCliente ************")
+    return Fedex(codigoCliente)
   }
 }
 
