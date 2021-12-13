@@ -1,5 +1,6 @@
 package com.example.annotations
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,11 +16,13 @@ fun main(args: Array<String>) {
 
 @RestController
 class mainController {
-
+  @Autowired
+  private lateinit var boda: Boda
 
   @GetMapping("/ceremonia-pastel")
   fun main() {
     println("yo mandaré a llamar el metodo comer pastel")
+    boda.ceremoniaPastel()
   }
 
 
