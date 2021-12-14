@@ -4,6 +4,9 @@ import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -70,23 +73,13 @@ class Fedex(val codigoCliente: String, val invitacionConfiguracion: InvitacionCo
   }
 }
 
-@Service
-@Profile("prod")
-class DHL(val invitacionConfiguracion: InvitacionConfiguracion) : MensajeriaService {
-  override fun enviarPaqueteA(nombre: String) {
-    println("soy DHL y reparto mas rapido")
-    println("paquete de ${invitacionConfiguracion.remitente}")
-    println("Mensaje final ${invitacionConfiguracion.mensajeFinal}")
-  }
-
-}
-
-
 @Configuration
 class ConfigurarMensajeria {
 
   @Bean
-  @Profile("!prod")
+  @ConditionalOnExpression(
+    "'\${servicio}'  != 'premium'"
+  )
   fun configurarPaqueteria(
     @Value("\${fedex.codigo}") codigoCliente: String,
     invitacionConfiguracion: InvitacionConfiguracion
@@ -94,6 +87,21 @@ class ConfigurarMensajeria {
     println("***************  El codigo fedex es $codigoCliente ************")
     return Fedex(codigoCliente, invitacionConfiguracion)
   }
+}
+
+@Service
+@ConditionalOnProperty(
+  value = ["servicio"],
+  havingValue = "premium",
+  matchIfMissing = true
+)
+class DHL(val invitacionConfiguracion: InvitacionConfiguracion) : MensajeriaService {
+  override fun enviarPaqueteA(nombre: String) {
+    println("soy DHL y reparto mas rapido")
+    println("paquete de ${invitacionConfiguracion.remitente}")
+    println("Mensaje final ${invitacionConfiguracion.mensajeFinal}")
+  }
+
 }
 
 @Entity
