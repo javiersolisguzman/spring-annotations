@@ -6,6 +6,7 @@ import javax.persistence.Id
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
@@ -69,11 +70,23 @@ class Fedex(val codigoCliente: String, val invitacionConfiguracion: InvitacionCo
   }
 }
 
+@Service
+@Profile("prod")
+class DHL(val invitacionConfiguracion: InvitacionConfiguracion) : MensajeriaService {
+  override fun enviarPaqueteA(nombre: String) {
+    println("soy DHL y reparto mas rapido")
+    println("paquete de ${invitacionConfiguracion.remitente}")
+    println("Mensaje final ${invitacionConfiguracion.mensajeFinal}")
+  }
+
+}
+
 
 @Configuration
 class ConfigurarMensajeria {
 
   @Bean
+  @Profile("!prod")
   fun configurarPaqueteria(
     @Value("\${fedex.codigo}") codigoCliente: String,
     invitacionConfiguracion: InvitacionConfiguracion
